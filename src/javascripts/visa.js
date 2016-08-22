@@ -80,7 +80,7 @@ function nextQuestion(choice) {
     // }
     submt = true;
     $('#results').remove();
-    $('#question').text('MINKÄ VÄRINEN?'); // HALUTAANKO YLÖS TEKSTI?
+    $('#question').text(''); // HALUTAANKO YLÖS TEKSTI?
     $('#pager').text('vaihe ' + Number(currentquestion));
     if (quiz[currentquestion] != "") { // 
     $('#question-word')
@@ -140,7 +140,12 @@ function addChoices(choices) {
     if (typeof choices !== "undefined" && $.type(choices) == "array") {
         $('#choice-block').empty();
         for (var i = 0; i < 4; i++) {
-            $(document.createElement('li')).addClass('btn btn-outlined choice choice-box').attr('data-index', choices[i]).text(choices[i]).appendTo('#choice-block');
+            $(document.createElement('button'))
+                .addClass('btn btn-info choice choice-box')
+                .attr('data-index', choices[i])
+                .text(choices[i])
+                .appendTo('#choice-block');
+            //$(document.createElement('li')).addClass('btn btn-outlined choice choice-box').attr('data-index', choices[i]).text(choices[i]).appendTo('#choice-block');
         };
     }
 }
@@ -185,8 +190,8 @@ function showAnswer (rightOrNot) {
 
     let resultTemplate = `
     <div id="results">
-    <div id="results_header">${answer}</div>
-    <li class="btn btn-outlined choice-box nextQuestion" data-index="s">Seuraava kysymys</li>
+    <div id="results_header"><i class="fa fa-check" aria-hidden="true" style="color:green"></i> <i class="fa fa-times" aria-hidden="true" style="color: red"></i>${answer}</div>
+    <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
     </div>
      `
 
@@ -245,7 +250,7 @@ function init() {
     //add pager
     //$(document.createElement('p')).addClass('pager').attr('id', 'pager').text('vaihe 1').appendTo('#frame');
     //add first question
-    $(document.createElement('h2')).addClass('question').attr('id', 'question').text('Minkä värinen teksti on?').appendTo('#frame');
+    $(document.createElement('h2')).addClass('question').attr('id', 'question').text('').appendTo('#frame');
 
     //add image if present
     if (quiz[0].hasOwnProperty('words') && quiz[0]['words'] != "") {
