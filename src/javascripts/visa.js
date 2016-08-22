@@ -16,8 +16,9 @@ var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla o
 
 
 // Todo: Toisesta pitää päästä eroon 
-let alphabetOrig = 'abcdefghijklmnopqrstuvwxyz'.split('');
-let alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+let alphabetOrig = 'ABCDEFHIJKLMNOPQRSTUVWXYZÅÄÖ'.split('');
+let alphabet = 'ABCDEFHIJKLMNOPQRSTUVWXYZÅÄÖ'.split('');
 
 // Shuffle quiz array 
 function shuffle (array) {
@@ -58,7 +59,8 @@ function endAndStartTimer() {
         if (currentquestion == quiz.length) {
             endQuiz();
         } else {
-            nextQuestion(); 
+            //nextQuestion(); 
+            showAnswer(2);
         }
     },timeLimit); 
 }
@@ -68,45 +70,28 @@ function htmlEncode(value) {
 }
 
 function nextQuestion(choice) {
-   console.log("alphabet=")
-    if (!choice) {
-        window.clearTimeout(timer);
-        endQuiz();
-        return;
-    }
+     $('#results').remove();
+     $('.timer-bar-container').remove();
+    // if (!choice) {
+    //     window.clearTimeout(timer);
+        
+    //     endQuiz();
+    //     return;
+    // }
     submt = true;
-    $('#question').text('Minkä värinen teksti on?');
+    $('#results').remove();
+    $('#question').text('MINKÄ VÄRINEN?'); // HALUTAANKO YLÖS TEKSTI?
     $('#pager').text('vaihe ' + Number(currentquestion));
-    if (alphabetShuffled[currentquestion] != "") {
-    if ($('#question-word').length == 0) {
-    $('#question-word')
-    	.addClass('question-word')
-    	.removeClass(quiz[currentquestion-1]['color'])
-    	.addClass(quiz[currentquestion]['color'])
-    	.attr('id', 'question-word')
-    	.html(alphabetShuffled[currentquestion])
-    	.insertAfter('#question');
-    } else {
+    if (quiz[currentquestion] != "") { // 
     $('#question-word')
 	    .addClass('question-word')
-	    .removeClass(quiz[currentquestion-1]['color'])
-	    .addClass(quiz[currentquestion]['color'])
-	    .attr('id', 'question-word').html(alphabetShuffled[currentquestion]);
-    }
-    } else {
-    $('#question-word').remove();
+	    .attr('id', 'question-word').html(quiz[currentquestion]['words']);
     }
 
     timeLimit = timeLimit - (timeLimit*0.03);
     endAndStartTimer(timeLimit);
-
-    let newArray = alphabetShuffled.slice(currentquestion, currentquestion + 4)
-    console.log("Tämä" + newArray)
-    let newArray2 = shuffle(newArray);
-
-    addChoices(newArray2);
-
-    addChoices(alphabetShuffled[currentquestion]);
+ 
+    addChoices(quiz[currentquestion]['words2']);
     setupButtons();
 }
  
@@ -162,14 +147,14 @@ function addChoices(choices) {
 
 
 function processQuestion(choice) {
-	console.log(nextLetter + choice)
-    if (nextLetter != choice) {
+	
+    if (quiz[currentquestion]["correct"]!= choice) {
     window.clearTimeout(timer);
-     endQuiz();
-    } else if (nextLetter === choice) {
-        score++;
+    showAnswer(0);
+    currentquestion++;
+    } else if (quiz[currentquestion]["correct"] === choice) {
         currentquestion++;
-        nextQuestion(choice);
+        showAnswer(1);
     } else {
         window.clearTimeout(timer);
         endQuiz();
@@ -178,6 +163,41 @@ function processQuestion(choice) {
     if (currentquestion == quiz.length) {
         endQuiz();
     } 
+}
+
+function showAnswer (rightOrNot) {
+    let answer;
+    if (rightOrNot === 1) {
+        answer = "Oikea vastaus";
+        console.log("right answer triggered");
+        score++;
+    } else if (rightOrNot === 0) {
+        answer = "Väärä vaustaus";
+        console.log("wrong answer triggered");
+    } else if (rightOrNot === 2) {
+        console.log("Time run out")
+        answer = "aika loppui"
+    }
+     else {
+        console.log("error: no answer detected");
+    };
+    console.log(answer + " tässä")
+
+    let resultTemplate = `
+    <div id="results">
+    <div id="results_header">${answer}</div>
+    <li class="btn btn-outlined choice-box nextQuestion" data-index="s">Seuraava kysymys</li>
+    </div>
+     `
+
+     $('.end-title2').remove();
+     window.clearTimeout(timer);
+     $(document.createElement('div')).addClass('end-title').attr('id', 'end-title2').html(resultTemplate).insertAfter('.timer-bar'); 
+     $('.nextQuestion').on('click', function () {
+        let picked = $(this).attr('data-index');
+        nextQuestion();
+    });
+     $('.timer-bar').remove();
 }
 
 
@@ -192,23 +212,22 @@ function setupButtons() {
 
     $('.choice').on('click', function () {
         picked = $(this).attr('data-index');
-        console.log("tämä valittiin " + picked)
-
         submt = false;
         $('.choice').off('click');
              $(this).off('click');
-             processQuestion(picked);
-
-        if (submt) {
-         submt = false;
-         $('#submitbutton').css({
-             'color': '#000'
-         }).on('click', function () {
-             $('.choice').off('click');
-             $(this).off('click');
-             processQuestion(picked);
-         });
-        }
+            processQuestion(picked);
+             
+        // if (submt) {
+        //  submt = false;
+        //  $('#submitbutton').css({
+        //      'color': '#000'
+        //  }).on('click', function () {
+        //      $('.choice').off('click');
+        //      $(this).off('click');
+        //     processQuestion(picked);
+        //     showAnswer(picked);
+        //  });
+        // }
     })
 }
 
@@ -219,16 +238,18 @@ function init() {
     $('.description').remove();
     $('#read-also').hide();
 
+    console.log(quiz[1]['words'])
+
     //add pager and questions
     if (typeof quiz !== "undefined" && $.type(quiz) === "array") {
     //add pager
-    $(document.createElement('p')).addClass('pager').attr('id', 'pager').text('vaihe 1').appendTo('#frame');
+    //$(document.createElement('p')).addClass('pager').attr('id', 'pager').text('vaihe 1').appendTo('#frame');
     //add first question
     $(document.createElement('h2')).addClass('question').attr('id', 'question').text('Minkä värinen teksti on?').appendTo('#frame');
 
     //add image if present
-    if (quiz[0].hasOwnProperty('word') && quiz[0]['word'] != "") {
-        $(document.createElement('span')).addClass('question-word').addClass(alphabetShuffled[0]['color']).attr('id', 'question-word').html(alphabetShuffled[0]).appendTo('#frame');
+    if (quiz[0].hasOwnProperty('words') && quiz[0]['words'] != "") {
+        $(document.createElement('span')).addClass('question-word').attr('id', 'question-word').html(quiz[0]['words']).appendTo('#frame');
     }
 
     //questions holder
@@ -236,15 +257,8 @@ function init() {
 
     //add choices
 
-    nextLetter = alphabetOrig[alphabetOrig.indexOf(alphabetShuffled[0]) + 1]
 
-    let newArray = alphabetShuffled.slice(0,3)
-
-    newArray.push(nextLetter)
-
-    let newArray2 = shuffle(newArray);
-    
-    addChoices(newArray2);
+    addChoices(quiz[0]['words2']);
 
     endAndStartTimer();
 
