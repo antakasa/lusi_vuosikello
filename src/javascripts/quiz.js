@@ -4,13 +4,13 @@ let quiz = [
 		"words" : [
                                 "Vihreä tee, laihdutusblogi, vesijuoksu, ummetus"
                                 ],
-        "words2" : [
+        "months" : [
                                 "kesäkuu",
                                 "tammikuu",
                                 "joulukuu",
                                 "marraskuu"
                                 ],
-        "words3" :              [
+        "popularWords" :              [
                                 "talopaketit",
                                 "melatoniini",
                                 "huuliherpes",
@@ -22,13 +22,13 @@ let quiz = [
         "words" : [
                                 "kesätyö, paasto, vänrikki Stoolin tarinat, influenssarokote "
                                 ],
-        "words2" : [
+        "months" : [
                                 "heinäkuu",
                                 "lokakuu",
                                 "helmikuu",
                                 "tammikuu"
                                 ],
-        "words3" :              [
+        "popularWords" :              [
                                 "hernekeitto",
                                 "ystävänpäiväruno",
                                 "Finlandia hiihto",
@@ -41,13 +41,13 @@ let quiz = [
         "words" : [
                                 "lutikka, riistakamera, ulkovalaisimet, herkkutatti"
                                 ],
-        "words2" : [
+        "months" : [
                                 "heinäkuu",
                                 "lokaku",
                                 "huhtikuu",
                                 "syyskuu",
                                 ],
-        "words3" :              [
+        "popularWords" :              [
                                 "hirvikärpänen",
                                 "syysloma",
                                 "sienet",
@@ -59,13 +59,13 @@ let quiz = [
         "words" : [
                                 "piparkakkutalo, pannacotta,  lahjaideat, silli "
                                 ],
-        "words2" : [
+        "months" : [
                                 "heinäkuu",
                                 "lokakuu",
                                 "joulukuu",
                                 "tammikuu"
                                 ],
-        "words3" :              [
+        "popularWords" :              [
                                 "kynttilät",
                                 "joulupukin kuumalinja",
                                 "poro",

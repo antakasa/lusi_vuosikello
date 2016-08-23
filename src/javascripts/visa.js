@@ -95,7 +95,7 @@ function nextQuestion(choice) {
     timeLimit = timeLimit - (timeLimit*0.03);
     endAndStartTimer(timeLimit);
  
-    addChoices(quiz[currentquestion]['words2']);
+    addChoices(quiz[currentquestion]['months']);
     setupButtons();
 }
  
@@ -204,10 +204,10 @@ function showAnswer (rightOrNot) {
     <div id="results_header"> ${sign} </i>${answer}.</div>
     <div class="results_body">Kyseessä oli ${correctAnswer}. Muita suosittuja sanoja tässä kuussa:</div>
     <ul class="results_body fa-ul">
-  <li class="results body">${quiz[currentquestion]["words3"][0]}</li>
-  <li>${quiz[currentquestion]["words3"][1]}</li>
-  <li>${quiz[currentquestion]["words3"][2]}</li>
-  <li>${quiz[currentquestion]["words3"][3]}</li>
+  <li class="results body">${quiz[currentquestion]["popularWords"][0]}</li>
+  <li>${quiz[currentquestion]["popularWords"][1]}</li>
+  <li>${quiz[currentquestion]["popularWords"][2]}</li>
+  <li>${quiz[currentquestion]["popularWords"][3]}</li>
 </ul>
     <div class="results_body"></div>
 
@@ -284,7 +284,7 @@ function init() {
     //add choices
 
 
-    addChoices(quiz[0]['words2']);
+    addChoices(quiz[0]['months']);
 
    // endAndStartTimer();
 
