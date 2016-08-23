@@ -1,51 +1,77 @@
+
 let quiz = [
     {
 		"words" : [
-                                "Makkara, Kalja, Aurinko, Mökki"
+                                "Vihreä tee, laihdutusblogi, vesijuoksu, ummetus"
                                 ],
         "words2" : [
                                 "kesäkuu",
                                 "tammikuu",
-                                "jouluku",
+                                "joulukuu",
                                 "marraskuu"
                                 ],
-        "correct" : "kesäkuu",
-    },
-    {
-        "words" : [
-                                "Lumi, Pakkanen, Kylmä, jää"
-                                ],
-        "words2" : [
-                                "heinäkuu",
-                                "lokaku",
-                                "huhtikuu",
-                                "tammikuu"
+        "words3" :              [
+                                "talopaketit",
+                                "melatoniini",
+                                "huuliherpes",
+                                "terveellinen ruokavalio"
                                 ],
         "correct" : "tammikuu",
     },
     {
         "words" : [
-                                "Jotain, jotain, jotain, jotain"
+                                "kesätyö, paasto, vänrikki Stoolin tarinat, influenssarokote "
+                                ],
+        "words2" : [
+                                "heinäkuu",
+                                "lokakuu",
+                                "helmikuu",
+                                "tammikuu"
+                                ],
+        "words3" :              [
+                                "hernekeitto",
+                                "ystävänpäiväruno",
+                                "Finlandia hiihto",
+                                "Weekend festival"
+                                ],                        
+
+        "correct" : "helmikuu",
+    },
+    {
+        "words" : [
+                                "lutikka, riistakamera, ulkovalaisimet, herkkutatti"
                                 ],
         "words2" : [
                                 "heinäkuu",
                                 "lokaku",
                                 "huhtikuu",
-                                "tammikuu"
+                                "syyskuu",
                                 ],
-        "correct" : "tammikuu",
+        "words3" :              [
+                                "hirvikärpänen",
+                                "syysloma",
+                                "sienet",
+                                "ruska"
+                                ],            
+        "correct" : "syyskuu",
     },
         {
         "words" : [
-                                "Jee,jee,jee,jee"
+                                "piparkakkutalo, pannacotta,  lahjaideat, silli "
                                 ],
         "words2" : [
                                 "heinäkuu",
-                                "lokaku",
-                                "huhtikuu",
+                                "lokakuu",
+                                "joulukuu",
                                 "tammikuu"
                                 ],
-        "correct" : "tammikuu",
+        "words3" :              [
+                                "kynttilät",
+                                "joulupukin kuumalinja",
+                                "poro",
+                                "ilotulitus"
+                                ],            
+        "correct" : "joulukuu",
     },
 ];
 

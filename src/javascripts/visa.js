@@ -10,7 +10,7 @@ global.$ = jQuery;
  $( document ).ready(function() {
 
 
-var quizdescription = '<h3>Väripelissä ruutuun ilmesty erivärisiä sanoja. Tehtävänäsi on kertoa, minkä <strong>värinen</strong> näkemäsi sana on. </h3>';
+var quizdescription = '<h3>Pystytkö arvaamaan, mihin kuukauteen suositut hakusanat liittyvät? </h3>';
 var quizinstructions = '<p>Vastaamiseen on aikaraja, ja vauhti kiihtyy pelin edetessä. Miten pitkälle sinä pääset?</p>';
 var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla on peli kesken - Pelaaminen kehittää kognitiivisia taitoja</strong></a></p>';
 
@@ -44,18 +44,19 @@ let alphabetShuffled = shuffle(alphabet);
 
 /* quiz settings */
 
-var currentquestion = 0,
+var currentquestion = - 1,
 score = 0,
 submt = true,
-timeLimit = 4000,
+timeLimit = 6000,
 picked;
 
 
 var timer;
 function endAndStartTimer() {
     window.clearTimeout(timer);
+    
     timer = window.setTimeout(function(){
-        currentquestion++;
+       // currentquestion++;
         if (currentquestion == quiz.length) {
             endQuiz();
         } else {
@@ -70,6 +71,9 @@ function htmlEncode(value) {
 }
 
 function nextQuestion(choice) {
+     if (currentquestion == quiz.length - 1) {
+        endQuiz();
+    } 
      $('#results').remove();
      $('.timer-bar-container').remove();
     // if (!choice) {
@@ -85,7 +89,7 @@ function nextQuestion(choice) {
     if (quiz[currentquestion] != "") { // 
     $('#question-word')
 	    .addClass('question-word')
-	    .attr('id', 'question-word').html(quiz[currentquestion]['words']);
+	    .attr('id', 'question-word').html(quiz[currentquestion + 1]['words']);
     }
 
     timeLimit = timeLimit - (timeLimit*0.03);
@@ -96,6 +100,8 @@ function nextQuestion(choice) {
 }
  
 function endQuiz() {
+    $('#results').remove();
+    $('#end-title2').remove();
     $('.pager').empty();
     $('#question').empty();
     $('#choice-block').remove();  
@@ -105,7 +111,7 @@ function endQuiz() {
     $('#read-also').show().insertAfter('#share-article');
     $('.pager').text("Peli päättyi");
     $(document.createElement('h2')).addClass('end-title').attr('id', 'end-title').text('Sait pelistä ' + score + ' pistettä!').insertAfter('#question');  
-
+        $(document.createElement('h2')).addClass('results_body').attr('id', 'end-title').text('Jaa Facebookissa, Twitterissä, Google Plussassa jne. tähän').insertAfter('#end-title');  
     var endMessage;
     if (score < 3) { 
         endMessage = 'Työmuistisi saattaa olla täynnä. Kokeile uudestaan?';
@@ -156,64 +162,81 @@ function processQuestion(choice) {
     if (quiz[currentquestion]["correct"]!= choice) {
     window.clearTimeout(timer);
     showAnswer(0);
-    currentquestion++;
+    console.log(quiz[0])
+    //currentquestion++;
     } else if (quiz[currentquestion]["correct"] === choice) {
-        currentquestion++;
+    //    currentquestion++;
         showAnswer(1);
     } else {
         window.clearTimeout(timer);
         endQuiz();
     }
 
-    if (currentquestion == quiz.length) {
-        endQuiz();
-    } 
+   
 }
 
 function showAnswer (rightOrNot) {
-    let answer;
+    let answer, sign;
     if (rightOrNot === 1) {
-        answer = "Oikea vastaus";
+        answer = "Oikein";
         console.log("right answer triggered");
         score++;
+        sign = '<i class="fa fa-check" aria-hidden="true" style="color:green"></i>'
     } else if (rightOrNot === 0) {
-        answer = "Väärä vaustaus";
+        answer = "Väärin";
         console.log("wrong answer triggered");
+        sign = '<i class="fa fa-times" aria-hidden="true" style="color: red"></i>'
     } else if (rightOrNot === 2) {
-        console.log("Time run out")
-        answer = "aika loppui"
+        console.log("Time run out");
+        answer = "Aika loppui";
+        sign = '<i class="fa fa-times" aria-hidden="true" style="color: red"></i>';
     }
      else {
         console.log("error: no answer detected");
     };
-    console.log(answer + " tässä")
 
+    console.log(currentquestion +  "täs")
+
+    let correctAnswer = quiz[currentquestion]["correct"];
+    
     let resultTemplate = `
     <div id="results">
-    <div id="results_header"><i class="fa fa-check" aria-hidden="true" style="color:green"></i> <i class="fa fa-times" aria-hidden="true" style="color: red"></i>${answer}</div>
+    <div id="results_header"> ${sign} </i>${answer}.</div>
+    <div class="results_body">Kyseessä oli ${correctAnswer}. Muita suosittuja sanoja tässä kuussa:</div>
+    <ul class="results_body fa-ul">
+  <li class="results body">${quiz[currentquestion]["words3"][0]}</li>
+  <li>${quiz[currentquestion]["words3"][1]}</li>
+  <li>${quiz[currentquestion]["words3"][2]}</li>
+  <li>${quiz[currentquestion]["words3"][3]}</li>
+</ul>
+    <div class="results_body"></div>
+
     <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
     </div>
      `
 
      $('.end-title2').remove();
+
      window.clearTimeout(timer);
-     $(document.createElement('div')).addClass('end-title').attr('id', 'end-title2').html(resultTemplate).insertAfter('.timer-bar'); 
+     $(document.createElement('div')).addClass('end-title').attr('id', 'end-title2').html(resultTemplate).appendTo('#frame'); 
      $('.nextQuestion').on('click', function () {
         let picked = $(this).attr('data-index');
         nextQuestion();
     });
+
      $('.timer-bar').remove();
 }
 
 
 function setupButtons() {
+    currentquestion++;
     if(currentquestion >= 1 ) {
         $('#timer-bar-container'+(currentquestion-1)).remove();
     }
-    $(document.createElement('div')).addClass('timer-bar-container').attr('id', 'timer-bar-container'+currentquestion).appendTo('#frame');
-    $(document.createElement('div')).addClass('timer-bar').attr('id', 'timer-bar'+currentquestion).appendTo('#timer-bar-container'+currentquestion);
+    //$(document.createElement('div')).addClass('timer-bar-container').attr('id', 'timer-bar-container'+currentquestion).appendTo('#frame');
+    //$(document.createElement('div')).addClass('timer-bar').attr('id', 'timer-bar'+currentquestion).appendTo('#timer-bar-container'+currentquestion);
     timeLimit = timeLimit - 150;
-    $('#timer-bar'+currentquestion).animate({width:'0px'}, timeLimit, 'linear');
+    //$('#timer-bar'+currentquestion).animate({width:'0px'}, timeLimit, 'linear');
 
     $('.choice').on('click', function () {
         picked = $(this).attr('data-index');
@@ -243,8 +266,6 @@ function init() {
     $('.description').remove();
     $('#read-also').hide();
 
-    console.log(quiz[1]['words'])
-
     //add pager and questions
     if (typeof quiz !== "undefined" && $.type(quiz) === "array") {
     //add pager
@@ -265,7 +286,7 @@ function init() {
 
     addChoices(quiz[0]['words2']);
 
-    endAndStartTimer();
+   // endAndStartTimer();
 
     setupButtons();
 
