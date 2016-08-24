@@ -11,7 +11,7 @@ global.$ = jQuery;
 
 
 var quizdescription = '<h3>Pystytkö arvaamaan, mihin kuukauteen suositut hakusanat liittyvät? </h3>';
-var quizinstructions = '<p>Vastaamiseen on aikaraja, ja vauhti kiihtyy pelin edetessä. Miten pitkälle sinä pääset?</p>';
+var quizinstructions = '<p>Nämä suomalaisten hakusanat perustuvat Googlen aineistoon Ylen analyysin mukaan. Lue alta kuinka hakutermejä käytetään hakukoneoptimoinnissa.</p>';
 var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla on peli kesken - Pelaaminen kehittää kognitiivisia taitoja</strong></a></p>';
 
 
@@ -40,7 +40,7 @@ function shuffle (array) {
   return array2;
 }
 // TODO: miksi shuffle ylikirjoittaa alphabetin?
-let alphabetShuffled = shuffle(alphabet);
+shuffle(quiz)
 
 /* quiz settings */
 
@@ -48,6 +48,7 @@ var currentquestion = - 1,
 score = 0,
 submt = true,
 timeLimit = 6000,
+quizLength = 12,
 picked;
 
 
@@ -71,7 +72,7 @@ function htmlEncode(value) {
 }
 
 function nextQuestion(choice) {
-     if (currentquestion == quiz.length - 1) {
+     if (currentquestion == quizLength - 1) {
         endQuiz();
     } 
      $('#results').remove();
@@ -82,6 +83,8 @@ function nextQuestion(choice) {
     //     endQuiz();
     //     return;
     // }
+
+
     submt = true;
     $('#results').remove();
     $('#question').text(''); // HALUTAANKO YLÖS TEKSTI?
@@ -93,13 +96,14 @@ function nextQuestion(choice) {
     }
 
     timeLimit = timeLimit - (timeLimit*0.03);
-    endAndStartTimer(timeLimit);
+   // endAndStartTimer(timeLimit);
  
-    addChoices(quiz[currentquestion]['months']);
+    addChoices(quiz[currentquestion + 1]['months']);
     setupButtons();
 }
  
 function endQuiz() {
+    let shareText ="0"
     $('#results').remove();
     $('#end-title2').remove();
     $('.pager').empty();
@@ -110,8 +114,8 @@ function endQuiz() {
     $('#share-article').show();
     $('#read-also').show().insertAfter('#share-article');
     $('.pager').text("Peli päättyi");
-    $(document.createElement('h2')).addClass('end-title').attr('id', 'end-title').text('Sait pelistä ' + score + ' pistettä!').insertAfter('#question');  
-        $(document.createElement('h2')).addClass('results_body').attr('id', 'end-title').text('Jaa Facebookissa, Twitterissä, Google Plussassa jne. tähän').insertAfter('#end-title');  
+    $(document.createElement('h2')).addClass('end-title').attr('id', 'end-title').text('Sait pelistä ' + score + '/' + quizLength + ' pistettä!').insertAfter('#question');  
+      //  $(document.createElement('h2')).addClass('results_body').attr('id', 'end-title').html('<i class="fa fa-facebook-square" aria-hidden="true" style="size:20px"></i><i class="fa fa-twitter-square" aria-hidden="true"></i>').insertAfter('#end-title');  
     var endMessage;
     if (score < 3) { 
         endMessage = 'Työmuistisi saattaa olla täynnä. Kokeile uudestaan?';
@@ -134,9 +138,9 @@ function endQuiz() {
         shareText = 'Sain ' + score + ' oikein Väritestissä. Aivokuoren sisäiset yhteydet pelaavat!';
     };
 
-    $(document.createElement('h4')).addClass('result-text').html(endMessage).appendTo('#frame');
+    //$(document.createElement('h4')). addClass('result-text').html(endMessage).appendTo('#frame');
     $(document.createElement('p')).attr('id', 'quiz-restart').appendTo('#frame');
-    $(document.createElement('a')).attr('id', 'quiz-start').addClass('btn btn-outlined').attr('title', 'Aloita peli uudestaan').attr('href', 'javascript: location.reload();').html('Pelaa uudestaan').appendTo('#quiz-restart');
+    $(document.createElement('a')).attr('id', 'quiz-start').attr('style', 'text-align: center').attr('title', 'Kokeile uudestaan').attr('href', 'javascript: location.reload();').html('<button class="btn btn-primary">Pelaa uudestaan!</button>').appendTo('#quiz-restart');
     $('#share-facebook').html('<a title="Jaa Facebookiin" href="https://www.facebook.com/dialog/feed?app_id=1397564560570485&link=http://yle.fi/teos/ihmeellisetaivot/varipeli&picture=http://yle.fi/teos/ihmeellisetaivot/img/share/varipeli.jpg&name=' + shareText + '&caption=Ihmeelliset%20Aivot&description=Toimintapelien pelaaminen parantaa huomiokykyä. Keskimäärin pelaajat pärjäävät väritestissä paremmin kuin muut. Kokeile miten itse pärjäät testissä!&redirect_uri=http://yle.fi/teos/ihmeellisetaivot/varipeli&display=popup"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span><p class="georgia">Facebookissa</p></a>');
     $('#share-twitter').html('<a title="Jaa Twitteriin" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fyle.fi%2Fihmeellisetaivot%2Fvaripeli&text=' + shareText + ' Testaa omat hoksottimesi&hashtags=ihmeaivot"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span><p class="georgia">Twitterissä</p></a>');
 }
@@ -201,19 +205,18 @@ function showAnswer (rightOrNot) {
     
     let resultTemplate = `
     <div id="results">
-    <div id="results_header"> ${sign} </i>${answer}.</div>
-    <div class="results_body">Kyseessä oli ${correctAnswer}. Muita suosittuja sanoja tässä kuussa:</div>
-    <ul class="results_body fa-ul">
-  <li class="results body">${quiz[currentquestion]["popularWords"][0]}</li>
-  <li>${quiz[currentquestion]["popularWords"][1]}</li>
-  <li>${quiz[currentquestion]["popularWords"][2]}</li>
-  <li>${quiz[currentquestion]["popularWords"][3]}</li>
+    <div id="results_header"> ${sign} </i>${answer}</div>
+    <div class="results_header">Kyseessä oli ${correctAnswer}.</div>
+    <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
+    <div class="results_body">Suosituimmat hakutermit ${correctAnswer}ssa:</div>
+    <ul class="results_body fa-ul" id="top20">
 </ul>
     <div class="results_body"></div>
 
-    <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
+    
     </div>
      `
+
 
      $('.end-title2').remove();
 
@@ -223,6 +226,10 @@ function showAnswer (rightOrNot) {
         let picked = $(this).attr('data-index');
         nextQuestion();
     });
+    for (let i = 0; i < quiz[currentquestion]["popularWords"].length; i++) {
+    console.log(quiz[currentquestion]["popularWords"][i])
+     $(document.createElement('span')).attr('id', 'top20').text(quiz[currentquestion]["popularWords"][i]+ ', ').appendTo('#top20'); 
+    };
 
      $('.timer-bar').remove();
 }
@@ -298,10 +305,9 @@ $(document.createElement('div')).addClass('description').html(quizdescription).a
 $(document.createElement('div')).addClass('description').html(quizinstructions).appendTo('#frame');
 $(document.createElement('div')).addClass('start-test').attr('id', 'start-test').appendTo('#frame');
 $(document.createElement('a'))
-	.addClass('btn btn-outlined')
 	.attr('id', 'quiz-start')
 	.attr('title', 'Aloita peli')
-	.html('<span class="moi">Aloita!</span>')
+	.html(' <button class="btn btn-primary">Aloita!</button>')
 	.appendTo('#start-test')
 	.click(function() { init(); }); 
 
