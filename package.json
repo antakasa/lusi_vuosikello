@@ -75,12 +75,15 @@
     "require-dir": "0.3.0",
     "sinon": "1.17.3",
     "sinon-chai": "2.8.0",
+    "typer": "^1.1.0",
     "webpack": "1.12.14",
     "webpack-dev-middleware": "1.5.1",
     "webpack-hot-middleware": "2.10.0"
   },
   "license": "MIT",
   "dependencies": {
-    "normalize.css": "^4.0.0"
+    "normalize.css": "^4.0.0",
+    "typer": "^1.1.0",
+    "typer-js": "^2.1.1"
   }
 }

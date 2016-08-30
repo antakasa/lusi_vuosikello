@@ -1,17 +1,13 @@
 import { quiz } from './quiz'
-
-var $ = require('jquery')
-const jQuery = require('jquery');
-console.log("fasdsafdsfsd");
-global.jQuery = jQuery;
-global.$ = jQuery;
+var typer = require('typer-js');
 
 
- $( document ).ready(function() {
+
+$( document ).ready(function() {
 
 
 var quizdescription = '<h3>Pystytkö arvaamaan, mihin kuukauteen suositut hakusanat liittyvät? </h3>';
-var quizinstructions = '<p>Nämä suomalaisten hakusanat perustuvat Googlen aineistoon Ylen analyysin mukaan. Lue alta kuinka hakutermejä käytetään hakukoneoptimoinnissa.</p>';
+var quizinstructions = '<p>Nämä suomalaisten hakusanat perustuvat Googlen aineistoon Ylen analyysin mukaan. Lue alta kuinka hakutermejä käytetään hakukoneoptimoinnissa. </p>';
 var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla on peli kesken - Pelaaminen kehittää kognitiivisia taitoja</strong></a></p>';
 
 
@@ -90,9 +86,10 @@ function nextQuestion(choice) {
     $('#question').text(''); // HALUTAANKO YLÖS TEKSTI?
     $('#pager').text('vaihe ' + Number(currentquestion));
     if (quiz[currentquestion] != "") { // 
-    $('#question-word')
-	    .addClass('question-word')
-	    .attr('id', 'question-word').html(quiz[currentquestion + 1]['words']);
+    $('#input').empty();
+    typer('#input', 60)
+        .cursor({color: 'rgb(0,0,0)'})
+        .line(quiz[currentquestion + 1]['words'][0]);
     }
 
     timeLimit = timeLimit - (timeLimit*0.03);
@@ -104,6 +101,7 @@ function nextQuestion(choice) {
  
 function endQuiz() {
     let shareText ="0"
+    $('#input').remove();
     $('#results').remove();
     $('#end-title2').remove();
     $('.pager').empty();
@@ -138,9 +136,9 @@ function endQuiz() {
         shareText = 'Sain ' + score + ' oikein Väritestissä. Aivokuoren sisäiset yhteydet pelaavat!';
     };
 
-    //$(document.createElement('h4')). addClass('result-text').html(endMessage).appendTo('#frame');
-    $(document.createElement('p')).attr('id', 'quiz-restart').appendTo('#frame');
-    $(document.createElement('a')).attr('id', 'quiz-start').attr('style', 'text-align: center').attr('title', 'Kokeile uudestaan').attr('href', 'javascript: location.reload();').html('<button class="btn btn-primary">Pelaa uudestaan!</button>').appendTo('#quiz-restart');
+    //$(document.createElement('h4')). addClass('result-text').html(endMessage).appendTo('#app');
+    $(document.createElement('p')).attr('id', 'quiz-restart').appendTo('#app');
+    $(document.createElement('a')).attr('id', 'quiz-start').attr('title', 'Kokeile uudestaan').attr('href', 'javascript: location.reload();').html('<button class="btn btn-primary">Pelaa uudestaan!</button>').appendTo('#quiz-restart');
     $('#share-facebook').html('<a title="Jaa Facebookiin" href="https://www.facebook.com/dialog/feed?app_id=1397564560570485&link=http://yle.fi/teos/ihmeellisetaivot/varipeli&picture=http://yle.fi/teos/ihmeellisetaivot/img/share/varipeli.jpg&name=' + shareText + '&caption=Ihmeelliset%20Aivot&description=Toimintapelien pelaaminen parantaa huomiokykyä. Keskimäärin pelaajat pärjäävät väritestissä paremmin kuin muut. Kokeile miten itse pärjäät testissä!&redirect_uri=http://yle.fi/teos/ihmeellisetaivot/varipeli&display=popup"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span><p class="georgia">Facebookissa</p></a>');
     $('#share-twitter').html('<a title="Jaa Twitteriin" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fyle.fi%2Fihmeellisetaivot%2Fvaripeli&text=' + shareText + ' Testaa omat hoksottimesi&hashtags=ihmeaivot"><span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-twitter fa-stack-1x fa-inverse"></i></span><p class="georgia">Twitterissä</p></a>');
 }
@@ -151,7 +149,7 @@ function addChoices(choices) {
         $('#choice-block').empty();
         for (var i = 0; i < 4; i++) {
             $(document.createElement('button'))
-                .addClass('btn btn-info choice choice-box')
+                .addClass('btn btn-primary choice choice-box')
                 .attr('data-index', choices[i])
                 .text(choices[i])
                 .appendTo('#choice-block');
@@ -199,16 +197,16 @@ function showAnswer (rightOrNot) {
         console.log("error: no answer detected");
     };
 
-    console.log(currentquestion +  "täs")
+    
 
     let correctAnswer = quiz[currentquestion]["correct"];
     
     let resultTemplate = `
     <div id="results">
-    <div id="results_header"> ${sign} </i>${answer}</div>
-    <div class="results_header">Kyseessä oli ${correctAnswer}.</div>
+    <div class="results_header"> ${sign} </i><b>${answer}</b>. Kyseessä oli ${correctAnswer}</div>
+    
     <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
-    <div class="results_body">Suosituimmat hakutermit ${correctAnswer}ssa:</div>
+    <div class="results_body">Näitä haetaan ${correctAnswer}ssa:</div>
     <ul class="results_body fa-ul" id="top20">
 </ul>
     <div class="results_body"></div>
@@ -221,7 +219,7 @@ function showAnswer (rightOrNot) {
      $('.end-title2').remove();
 
      window.clearTimeout(timer);
-     $(document.createElement('div')).addClass('end-title').attr('id', 'end-title2').html(resultTemplate).appendTo('#frame'); 
+     $(document.createElement('div')).addClass('end-title').attr('id', 'end-title2').html(resultTemplate).appendTo('#app'); 
      $('.nextQuestion').on('click', function () {
         let picked = $(this).attr('data-index');
         nextQuestion();
@@ -240,7 +238,7 @@ function setupButtons() {
     if(currentquestion >= 1 ) {
         $('#timer-bar-container'+(currentquestion-1)).remove();
     }
-    //$(document.createElement('div')).addClass('timer-bar-container').attr('id', 'timer-bar-container'+currentquestion).appendTo('#frame');
+    //$(document.createElement('div')).addClass('timer-bar-container').attr('id', 'timer-bar-container'+currentquestion).appendTo('#app');
     //$(document.createElement('div')).addClass('timer-bar').attr('id', 'timer-bar'+currentquestion).appendTo('#timer-bar-container'+currentquestion);
     timeLimit = timeLimit - 150;
     //$('#timer-bar'+currentquestion).animate({width:'0px'}, timeLimit, 'linear');
@@ -276,17 +274,26 @@ function init() {
     //add pager and questions
     if (typeof quiz !== "undefined" && $.type(quiz) === "array") {
     //add pager
-    //$(document.createElement('p')).addClass('pager').attr('id', 'pager').text('vaihe 1').appendTo('#frame');
+    //$(document.createElement('p')).addClass('pager').attr('id', 'pager').text('vaihe 1').appendTo('#app');
     //add first question
-    $(document.createElement('h2')).addClass('question').attr('id', 'question').text('').appendTo('#frame');
+    $(document.createElement('h2')).addClass('question').attr('id', 'question').text('').appendTo('#app');
+
+    let questionTemplate = ``
+
+
 
     //add image if present
     if (quiz[0].hasOwnProperty('words') && quiz[0]['words'] != "") {
-        $(document.createElement('span')).addClass('question-word').attr('id', 'question-word').html(quiz[0]['words']).appendTo('#frame');
+        $(document.createElement('div')).attr('id', 'input').attr('contenteditable','true').appendTo('#app');
+       typer('#input', 60)
+        .cursor({color: 'rgb(0,0,0)'})
+        .line(quiz[0]['words'][0])
+        .listen('click')
+        .back('empty');
     }
 
     //questions holder
-    $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#frame');
+    $(document.createElement('ul')).attr('id', 'choice-block').appendTo('#app');
 
     //add choices
 
@@ -301,9 +308,9 @@ function init() {
 }
 
 //add description etc.
-$(document.createElement('div')).addClass('description').html(quizdescription).appendTo('#frame');
-$(document.createElement('div')).addClass('description').html(quizinstructions).appendTo('#frame');
-$(document.createElement('div')).addClass('start-test').attr('id', 'start-test').appendTo('#frame');
+$(document.createElement('div')).addClass('description').html(quizdescription).appendTo('#app');
+$(document.createElement('div')).addClass('description').html(quizinstructions).appendTo('#app');
+$(document.createElement('div')).addClass('start-test').attr('id', 'start-test').appendTo('#app');
 $(document.createElement('a'))
 	.attr('id', 'quiz-start')
 	.attr('title', 'Aloita peli')

@@ -1,56 +1,206 @@
-@import normalize
-@import base/mixins
+#app #input
+  -moz-appearance: textfield
+  -webkit-appearance: textfield
+  background-color: white
+  background-color: -moz-field
+  border: 1px solid darkgray
+  box-shadow: 1px 1px 1px 0 lightgray inset
+  font: -moz-field
+  font: -webkit-small-control
+  font-size: 20px
+  margin-top: 5px
+  padding: 5px 3px
+  width: 100%px
+  height: 30px
 
-#frame 
+.typer
+  position: relative
+  min-height: 2ex
+  &::after
+    content: ''
+    position: absolute
+    display: inline-block
+    width: 0.1em
+    height: 1.1em
+    background-color: currentColor
+    margin-left: 0.1em
+
+.cursor-block::after
+  width: 0.9ex
+
+.cursor-soft::after
+  -webkit-animation: softblink 0.7s infinite
+  animation: softblink 0.7s infinite
+
+.cursor-hard::after
+  -webkit-animation: hardblink 0.7s infinite
+  animation: hardblink 0.7s infinite
+
+.no-cursor::after
+  content: none
+
+@-webkit-keyframes softblink
+  0%
+    opacity: 1
+
+  50%
+    opacity: 0
+
+  100%
+    opacity: 1
+
+
+@keyframes softblink
+  0%
+    opacity: 1
+
+  50%
+    opacity: 0
+
+  100%
+    opacity: 1
+
+
+@-webkit-keyframes hardblink
+  0%
+    opacity: 1
+
+  49%
+    opacity: 1
+
+  50%
+    opacity: 0
+
+  100%
+    opacity: 0
+
+
+@keyframes hardblink
+  0%
+    opacity: 1
+
+  49%
+    opacity: 1
+
+  50%
+    opacity: 0
+
+  100%
+    opacity: 0
+
+
+.white-space
+  white-space: pre-wrap
+
+
+@font-face
+  font-family: 'Roboto'
+  font-style: normal
+  font-weight: 400
+  src: local("Roboto"), local("Roboto-Regular"), url(https://fonts.gstatic.com/s/roboto/v15/sTdaA6j0Psb920Vjv-mrzH-_kf6ByYO6CLYdB4HQE-Y.woff2) format("woff2")
+  unicode-range: U+0460-052F, U+20B4, U+2DE0-2DFF, U+A640-A69F
+
+#app #google
+  font-family: "Roboto"
+  font-size: 5em
+  text-align: center
+  line-height: 50%
+
+#app .blue
+  color: #4385f5
+
+#app .red
+  color: #dc4437
+
+#app .yellow
+  color: #f5b400
+
+#app .green
+  color: #109d59
+
+
+#app  
 	max-width: 720px
 	width: 100%
 	display: table 
 	margin: auto 
 
-.pager
+#app .pager
   font: normal normal 18px Georgia, sans
   color: #666
 
-h2.question
+#app h2.question
   font-size: 20px
   color: #4c4c4c
   text-transform: none
   font-weight: normal
 
 /* kysyttÃ¤vÃ¤ sana ja vÃ¤rit
-
-.results_body
-  text-align: center
+#app .btn
+  padding: 14px 24px
+  border: 0 none
+  font-weight: 700
   font-size: 15px
+  letter-spacing: 1px
+  text-transform: uppercase
+  &:focus, &:active:focus, &.active:focus
+    outline: 0 none
+
+#app .fa-ul
+  margin-left: 0px
+
+#app .btn-primary
+  background: #0099cc
+  border-radius: 8px
+  color: #ffffff
+  &:hover, &:focus, &:active, &.active
+    background: #33a6cc
+
+#app .nextQuestion
+    font-size: 15px
+    padding: 10x 20px
+
+#app .open > .dropdown-toggle.btn-primary
+  background: #33a6cc
+
+#app .btn-primary
+  &:active, &.active
+    background: #007299
+    box-shadow: none
+#app .results_body
+  text-align: center
+  font-size: 20px
   margin: 10px
   text-transform: none
 
-#top20
-  font-size: 15px
+#app #top20
+  font-size: 20px
    text-transform: normal
   font-weight: normal
   
-.results_header
+#app .results_header
   display: block
   text-align: center
-  font-family: 'Lato', sans-serif
+  //font-family: 'Lato', sans-serif
   font-size: 20px
   text-transform: none
+  margin-bottom: 10px
+  font-weight: normal
 
-.question-word
+#app .question-word
   display: block
   text-align: center
-  font-family: 'Lato', sans-serif
+  //font-family: 'Lato', sans-serif
   font-size: 30px
   font-weight: bold
   text-transform: uppercase
   margin: 10px 0 10px
 
-.end-title
+#app .end-title
   display: block
   text-align: center
   margin: 10px auto
-  font-family: 'Lato', sans-serif
+  //font-family: 'Lato', sans-serif
   font-size: 60px
   font-weight: bold
   text-transform: uppercase
@@ -58,38 +208,14 @@ h2.question
   font-size: 40px
   margin-bottom: 20px
 
-.red
-  color: #c72f2f
-
-.blue
-  color: #2654b1
-
-.yellow
-  color: #efd600
-
-.gray
-  color: #666666
-
-.purple
-  color: #772cbd
-
-.green
-  color: #6dac03
-
-.orange
-  color: #ec9000
-
-.brown
-  color: #583b0d
-
-#choice-block
+#app #choice-block
   display: block
   list-style: none
-  margin: 0 auto
+  margin: 10px auto
   padding: 0
   overflow: hidden
 
-.choice-box
+#app .choice-box
   display: inline-block
   text-align: center
   padding: 15px 0
@@ -97,14 +223,17 @@ h2.question
   width: 45%
   margin: 5px
 
-.btn.btn-outlined:hover
+#app .btn.btn-outlined:hover
   border-color: #666
   background: #666
 
-.start-test
+#app #quiz-restart
+  text-align: center
+
+#app .start-test
   margin: 40px auto
 
-.timer-bar-container
+#app .timer-bar-container
   width: 100%
   max-width: 655px
   height: 20px
@@ -113,23 +242,28 @@ h2.question
   border: solid 1px #999
   box-sizing: content-box
 
-.timer-bar
+#app .timer-bar
   width: inherit
   height: 20px
   background: #999
 
-.result-text
+#app .result-text
   font-size: 20px
   color: #4c4c4c
   margin-bottom: 40px
 
-.row
+  #app .result-text
+  font-size: 20px
+  color: #4c4c4c
+  margin-bottom: 40px
+
+#app .row
   &#peli
     margin: 0 auto
   &#share-article
     margin-top: 0
 
-#share-article
+#app  #share-article
   ul
     margin: 0
   p
@@ -140,14 +274,14 @@ h2.question
 /*.description  { margin-bottom: 40px; }
 
 @media only screen and (max-width: 767px)
-  .test h3
+  #app .test h3
     font-size: 24px
     line-height: 30px
-  .timer-bar-container
+  #app .timer-bar-container
     width: 90%
 
 @media only screen and (max-width: 599px)
-  .test
+  #app .test
     h1
       font-size: 40px
     h3
@@ -156,36 +290,38 @@ h2.question
     .row.share-links
       margin-top: 10px
       margin-bottom: 0px
-  .fa-stack
+  #app .fa-stack
     font-size: 14px !important
-  .pager, h2.question
+  #app .pager, h2.question
     margin: 10px auto
 
 @media only screen and (max-width: 479px)
-  body
+  #app #input
+    height: 50px
+  #app body
     font-size: 14px
     line-height: 20px
-  .row
+  #app .row
     margin: 20px auto
-  .test
+  #app .test
     h1
       font-size: 36px
     h3
       font-size: 18px
       line-height: 22px
-  hr
+  #app hr
     margin: 5px auto 20px
-  .question-word
+  #app .question-word
     font-size: 20px
-  .pager, h2.question
+  #app .pager, h2.question
     font-size: 18px
     margin: 10px auto
-  .timer-bar-container
+  #app .timer-bar-container
     margin: 30px auto
-  .end-title
+  #app .end-title
     font-size: 24px
-  .result-text
+  #app .result-text
     font-size: 18px
     text-align: center
-  p.share
+  #app p.share
     margin: 20px auto 10px
