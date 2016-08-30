@@ -13,9 +13,6 @@ var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla o
 
 // Todo: Toisesta pitää päästä eroon 
 
-let alphabetOrig = 'ABCDEFHIJKLMNOPQRSTUVWXYZÅÄÖ'.split('');
-let alphabet = 'ABCDEFHIJKLMNOPQRSTUVWXYZÅÄÖ'.split('');
-
 // Shuffle quiz array 
 function shuffle (array) {
   let currentIndex = array.length, temporaryValue, randomIndex;
@@ -114,28 +111,6 @@ function endQuiz() {
     $('.pager').text("Peli päättyi");
     $(document.createElement('h2')).addClass('end-title').attr('id', 'end-title').text('Sait pelistä ' + score + '/' + quizLength + ' pistettä!').insertAfter('#question');  
       //  $(document.createElement('h2')).addClass('results_body').attr('id', 'end-title').html('<i class="fa fa-facebook-square" aria-hidden="true" style="size:20px"></i><i class="fa fa-twitter-square" aria-hidden="true"></i>').insertAfter('#end-title');  
-    var endMessage;
-    if (score < 3) { 
-        endMessage = 'Työmuistisi saattaa olla täynnä. Kokeile uudestaan?';
-        shareText = 'Sain ' + score + ' oikein Väritestissä. Olisi ehkä syytä tyhjentää työmuisti?';
-    }
-    else if (score >= 3 && score < 6) { 
-        endMessage = 'Keskittymisessä on vielä parannettavaa. Tee testi toistamiseen?'; 
-        shareText = 'Sain ' + score + ' oikein Väritestissä. Keskittymisessä on vielä parannettavaa.';
-    }
-    else if (score >= 6 && score < 9) { 
-        endMessage = 'Aivosi hyödyntävät resursseja tehokkaasti.'; 
-        shareText = 'Sain ' + score + ' oikein Väritestissä. Aivoresurssit ovat tehokkaassa käytössä!';
-    }
-    else if (score >= 9 && score < 12) { 
-        endMessage = 'Hienosti meni! Hermosolusi värähtelevät tehokkaasti.'; 
-        shareText = 'Sain ' + score + ' oikein Väritestissä. Hermosolut värähtelevät kiitettävästi!';
-    }
-    else if (score >= 12) { 
-        endMessage = 'Aivokuoresi sisäiset yhteydet pelaavat ja aivosi käsittelevät tietoa erittäin tarkasti.'; 
-        shareText = 'Sain ' + score + ' oikein Väritestissä. Aivokuoren sisäiset yhteydet pelaavat!';
-    };
-
     //$(document.createElement('h4')). addClass('result-text').html(endMessage).appendTo('#app');
     $(document.createElement('p')).attr('id', 'quiz-restart').appendTo('#app');
     $(document.createElement('a')).attr('id', 'quiz-start').attr('title', 'Kokeile uudestaan').attr('href', 'javascript: location.reload();').html('<button class="btn btn-primary">Pelaa uudestaan!</button>').appendTo('#quiz-restart');
@@ -249,18 +224,7 @@ function setupButtons() {
         $('.choice').off('click');
              $(this).off('click');
             processQuestion(picked);
-             
-        // if (submt) {
-        //  submt = false;
-        //  $('#submitbutton').css({
-        //      'color': '#000'
-        //  }).on('click', function () {
-        //      $('.choice').off('click');
-        //      $(this).off('click');
-        //     processQuestion(picked);
-        //     showAnswer(picked);
-        //  });
-        // }
+
     })
 }
 
