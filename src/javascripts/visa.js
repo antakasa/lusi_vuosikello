@@ -6,8 +6,8 @@ var typer = require('typer-js');
 $( document ).ready(function() {
 
 
-var quizdescription = '<h3>Pystytkö arvaamaan, mihin kuukauteen suositut hakusanat liittyvät? </h3>';
-var quizinstructions = '<p>Nämä suomalaisten hakusanat perustuvat Googlen aineistoon Ylen analyysin mukaan. Lue alta kuinka hakutermejä käytetään hakukoneoptimoinnissa. </p>';
+var quizdescription = '';
+var quizinstructions = '<p><i>Arvaatko, mitkä Google-haut ovat suosittuja mihinkin aikaan vuodesta? Testaa taitosi Yle Oppimisen Hakusi-pelissä. Yhdistä hakusanat oikeaan kuukauteen! </i> </p>';
 var articlead = '<p>Lue myös: <a href="../mulla-on-peli-kesken"><strong>Mulla on peli kesken - Pelaaminen kehittää kognitiivisia taitoja</strong></a></p>';
 
 
@@ -176,11 +176,16 @@ function showAnswer (rightOrNot) {
 
     let correctAnswer = quiz[currentquestion]["correct"];
     
+    let nextQuestionButton = "Seuraava kysymys " + (currentquestion + 2) + "/12";
+    if (nextQuestionButton === "Seuraava kysymys 13/12") {
+        nextQuestionButton = "Näytä tulos!"
+    }
+
     let resultTemplate = `
     <div id="results">
     <div class="results_header"> ${sign} </i><b>${answer}</b>. Kyseessä oli ${correctAnswer}</div>
     
-    <button class="btn btn-primary nextQuestion" data-index="s">Seuraava kysymys</button>
+    <button class="btn btn-primary nextQuestion" data-index="s">${nextQuestionButton}</button>
     <div class="results_body">Näitä haetaan ${correctAnswer}ssa:</div>
     <ul class="results_body fa-ul" id="top20">
 </ul>
@@ -231,6 +236,7 @@ function setupButtons() {
 let nextLetter;
 
 function init() {
+    $('#input').remove();
     $('#start-test').remove();
     $('.description').remove();
     $('#read-also').hide();
@@ -273,8 +279,16 @@ function init() {
 
 //add description etc.
 $(document.createElement('div')).addClass('description').html(quizdescription).appendTo('#app');
+$(document.createElement('div')).attr('id', 'input').attr('contenteditable','true').appendTo('#app');
+       typer('#input', 60)
+        .cursor({color: 'rgb(0,0,0)'})
+        .line("Kun olet valmis, paina aloita!")
+
+
+
 $(document.createElement('div')).addClass('description').html(quizinstructions).appendTo('#app');
 $(document.createElement('div')).addClass('start-test').attr('id', 'start-test').appendTo('#app');
+
 $(document.createElement('a'))
 	.attr('id', 'quiz-start')
 	.attr('title', 'Aloita peli')
